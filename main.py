@@ -106,7 +106,7 @@ def on_press(key):
 current_animation = []
 interaction_Options = {}
 
-selected = ">"
+selected = ">"+colors.fg.darkgrey
 unselected = " "
 
 row = ["play","refill water","feed","pet"]
@@ -118,22 +118,23 @@ interaction_Options["pet"] = unselected
 
 
 def build_actionWindow():
-    mendetoryBackspaces = 5
+    mendetoryBackspaces = 8
 
     global c1
     global current_animation
-
+    
     for c in current_animation:
+        print('\n'*2)
         print(c)
         leftBackspaces = mendetoryBackspaces - c.count('\n')
         print('\n' * leftBackspaces)
-        print("---------------------------------------")
 
-        build_interactionWindow()
+        build_statusWindow()
         time.sleep(0.4)
         cls()
 
 def build_interactionWindow():
+    
     global interaction_Options
     global row
     global current_option
@@ -142,9 +143,8 @@ def build_interactionWindow():
     interaction_Options[row[current_option]] = selected
 
     for key in interaction_Options:
-         print(f"{interaction_Options[key]} {key}")
-    print("---------------------------------------\n")
-    build_statusWindow()
+         print(f"{interaction_Options[key]} {key} {colors.reset}")
+    
 
 def calc_line(value):
     dotValue = int(value/10)
@@ -153,20 +153,32 @@ def calc_line(value):
 def build_statusWindow():
     global c1
     if calc_line(c1.health) < 5:
-        print(f"\tHealth:{colors.fg.orange}{'-'*calc_line(c1.health)}{' '*(10-calc_line(c1.health))}{colors.reset}{c1.health}%\n")    
+        print(f"\tHealth:{colors.fg.orange}{'-'*calc_line(c1.health)}{' '*(10-calc_line(c1.health))}{colors.reset}{c1.health}%")    
     else:
-        print(f"\tHealth:{colors.fg.green}{'-'*calc_line(c1.health)}{' '*(10-calc_line(c1.health))}{colors.reset}{c1.health}%\n")    
+        print(f"\tHealth:{colors.fg.green}{'-'*calc_line(c1.health)}{' '*(10-calc_line(c1.health))}{colors.reset}{c1.health}%")    
 
     if calc_line(c1.hunger) > 5:
-        print(f"\tHunger:{colors.fg.orange}{'-'*calc_line(c1.hunger)}{' '*(10-calc_line(c1.hunger))}{colors.reset}{c1.hunger}%\n")    
+        print(f"\tHunger:{colors.fg.orange}{'-'*calc_line(c1.hunger)}{' '*(10-calc_line(c1.hunger))}{colors.reset}{c1.hunger}%")    
     else:
-        print(f"\tHunger:{colors.fg.green}{'-'*calc_line(c1.hunger)}{' '*(10-calc_line(c1.hunger))}{colors.reset}{c1.hunger}%\n")    
+        print(f"\tHunger:{colors.fg.green}{'-'*calc_line(c1.hunger)}{' '*(10-calc_line(c1.hunger))}{colors.reset}{c1.hunger}%")    
  
     if calc_line(c1.thirst) > 5:
-        print(f"\tThirst:{colors.fg.orange}{'-'*calc_line(c1.thirst)}{' '*(10-calc_line(c1.thirst))}{colors.reset}{c1.thirst}%\n")    
+        print(f"\tThirst:{colors.fg.orange}{'-'*calc_line(c1.thirst)}{' '*(10-calc_line(c1.thirst))}{colors.reset}{c1.thirst}%")    
     else:
-        print(f"\tThirst:{colors.fg.green}{'-'*calc_line(c1.thirst)}{' '*(10-calc_line(c1.thirst))}{colors.reset}{c1.thirst}%\n")    
- 
+        print(f"\tThirst:{colors.fg.green}{'-'*calc_line(c1.thirst)}{' '*(10-calc_line(c1.thirst))}{colors.reset}{c1.thirst}%")    
+    print("----------------------------------------\n")
+    if entered_id == -1:
+        build_interactionWindow()
+    else:
+        loading()
+
+current_progress = ""
+max_progress = 0
+def loading():
+    global current_progress
+    print('\n'*1)
+    print(f"\t\t{row[current_option]}\n\n\tLoading:{current_progress} {' ' * ((max_progress*2) - current_progress.count(' '))}DONE")
+
 #Creature handling
 class cat:
     name = ''
@@ -271,7 +283,7 @@ my_file = Path("logfile.txt")
 if my_file.is_file():
     os.remove("logfile.txt")
 #resize window size
-system('mode con: cols=40 lines=25')
+system('mode con: cols=40 lines=22')
 
 
 c1 = cat("Sigi")
@@ -285,6 +297,26 @@ t1.start()
 
 #Statemaschine
 while True:
+    
+    if entered_id == -1:
+        log("Entering idle state")
+        current_animation = c1.anims['sleep']
+    elif entered_id == 0:
+        log("Entering play state")
+        current_animation = c1.anims['play']
+        time.sleep(3)
+        entered_id = -1
+        log("Entering play state2")
+    elif entered_id == 1:
+        current_animation = c1.anims['feed']
+        ...
+    elif entered_id == 2:
+        ...
+    elif entered_id == 3:
+        ...
+    elif entered_id == 4:
+        ...
+
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
         log("stopped listener")
@@ -292,14 +324,16 @@ while True:
     if entered_id == -1:
         log("Entering idle state")
         current_animation = c1.anims['sleep']
-        #idle
-        ...
     elif entered_id == 0:
         log("Entering play state")
         current_animation = c1.anims['play']
-        time.sleep(3)
+        max_progress = 5
+        for i in range(0,max_progress):
+            current_progress += f" {colors.bg.cyan} {colors.reset}"
+            time.sleep(1)
         entered_id = -1
-        ...
+        max_progress = 0
+        log("Entering play state2")
     elif entered_id == 1:
         current_animation = c1.anims['feed']
         ...
