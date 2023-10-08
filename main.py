@@ -19,6 +19,8 @@ stop_threads = False
 
 def uiCycle():
     while True:
+        if c1.health >= 0:
+            current_animation = c1.anims['dead']
         build_actionWindow()
         manage_values()
         global stop_threads
@@ -191,21 +193,33 @@ class cat:
         '''
 _._     _,-'""`-._
 (,-.`._,'(       |\`-/|
-    `-.-' \ )-`( , o o)
-          `-    \`_`"'-'
+    `-.-' \ )-`( , o o)     OO
+          `-    \`_`"'-'    OO
     ''',
     '''
 _._     _,-'""`-._
-\--.`._,'(       |\`-/|
-    `..-' \ )-`( , O O)
-          `-    \`_`"'-'
+\--.`._,'(       |\`-/|     OO
+    `..-' \ )-`( , O O)     OO
+          `-    \`_`"'-'    
     ''',
         '''
-_._     _,-'""`-._
-\--.`._,'(       |\`-/|
+_._     _,-'""`-._          OO
+\--.`._,'(       |\`-/|     OO
     `..-' \ )-`( , O O)
-          `-    \`_`"'-'
-    '''
+          `-    \`_`"'-'    
+    ''',
+            '''
+_._     _,-'""`-._
+(,-.`._,'(       |\`-/|     OO
+    `-.-' \ )-`( , o o)     OO
+          `-    \`_`"'-'    
+    ''',
+            '''
+_._     _,-'""`-._
+(,-.`._,'(       |\`-/|     
+    `-.-' \ )-`( , o o)     OO
+          `-    \`_`"'-'    oo 
+    ''',
     ]
     anims['sleep']=[
         '''
@@ -275,6 +289,16 @@ Z
      `-----'`-----` `--`  =====
         '''
     ]
+    animes['dead'] = [
+        '''
+      ,-===-.     
+     /       \    
+     |  Sigi |   
+     | R.I.P |   
+  V,,|_______|V,,V
+'''
+
+    ]
     def __init__(self, name):
         self.name = name
 
@@ -327,16 +351,25 @@ while True:
     elif entered_id == 0:
         log("Entering play state")
         current_animation = c1.anims['play']
-        max_progress = 5
+        max_progress = 6
         for i in range(0,max_progress):
             current_progress += f" {colors.bg.cyan} {colors.reset}"
             time.sleep(1)
-        current_progress =""
+        current_progress ="" 
         entered_id = -1
         max_progress = 0
-        log("Entering play state2")
+        log("Exeting play state")
     elif entered_id == 1:
+        log("Entering feed state")
         current_animation = c1.anims['feed']
+        max_progress = 4
+        for i in range(0,max_progress):
+            current_progress += f" {colors.bg.cyan} {colors.reset}"
+            time.sleep(1)
+        current_progress ="" 
+        entered_id = -1
+        max_progress = 0
+        log("Exeting play state")
         ...
     elif entered_id == 2:
         ...
