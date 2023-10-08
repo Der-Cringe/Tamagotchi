@@ -331,6 +331,7 @@ while True:
         for i in range(0,max_progress):
             current_progress += f" {colors.bg.cyan} {colors.reset}"
             time.sleep(1)
+        current_progress =""
         entered_id = -1
         max_progress = 0
         log("Entering play state2")
