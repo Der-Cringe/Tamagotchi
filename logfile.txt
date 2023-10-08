@@ -1,17 +1,6 @@
-1696777109.475193 : user input : enter
-1696777160.1550875 : user input : enter
-1696777160.1580794 : entered id is : 0
-1696777256.0591693 : user input : enter
-1696777256.0631585 : entered id is : 0
-1696777260.1229098 : user input : enter
-1696777260.1348782 : entered id is : 2
-1696777264.8429265 : user input : enter
-1696777264.8499093 : entered id is : 2
-1696777266.747052 : user input : enter
-1696777266.7540338 : entered id is : 2
-1696777275.8830457 : user input : enter
-1696777275.886038 : entered id is : 2
-1696777300.962831 : user input : enter
-1696777300.964826 : entered id is : 0
-1696777300.9688168 : stopped listener
-1696777300.9738023 : Entering play state
+Timestamp(1696782924.657166)=>user input : enter
+Timestamp(1696782924.6641476)=>entered id is : 1
+Timestamp(1696782924.6701324)=>stopped listener
+Timestamp(1696782968.7132084)=>user input : enter
+Timestamp(1696782968.7152033)=>entered id is : 1
+Timestamp(1696782968.7221847)=>stopped listener
