@@ -3,12 +3,57 @@ from os import system
 import threading
 import time
 from pynput import keyboard
+from pathlib import Path
 
+#logging
+def log(message):
+    f = open(Path(__file__).with_name('logfile.txt'), 'a')
+    f.write(f"{time.time()} : {message}\n")
+    f.close()
+
+#Thread managing
 stop_threads = False
-current_animation = []
+
+def uiCycle():
+    while True:
+        build_actionWindow()
+        global stop_threads
+        if stop_threads:
+            break
+
+#console interaction
 
 current_option = 1
+entered_id = -1
 
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+def on_press(key):
+        global current_option
+        global entered_id
+        if key == keyboard.Key.up:
+            if current_option >= 0:
+                current_option-=1
+            else:
+                current_option=len(row)-1
+        if key == keyboard.Key.down:
+            if current_option < len(row)-1:
+                current_option+=1
+            else:
+                current_option=0
+        if key == keyboard.Key.enter:
+            log("user input : enter")
+            entered_id = current_option
+            global listener
+            listener.stop()
+            log(f"entered id is : {entered_id}")
+        return True
+#UI managment
+#Build the "UI"
+
+
+current_animation = []
 interaction_Options = {}
 
 selected = ">"
@@ -21,24 +66,7 @@ interaction_Options["refill water"] = unselected
 interaction_Options["feed"] = unselected
 interaction_Options["pet"] = unselected
 
-def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
 
-
-def on_press(key):
-        global current_option
-        if key == keyboard.Key.up:
-            if current_option >= 0:
-                current_option-=1
-            else:
-                current_option=len(row)-1
-        if key == keyboard.Key.down:
-            if current_option < len(row)-1:
-                current_option+=1
-            else:
-                current_option=0
-
-#Build the "UI"
 def build_actionWindow():
     mendetoryBackspaces = 5
 
@@ -77,7 +105,7 @@ class cat:
     thirst = 0
     anims={}
 
-    anims['playing']=[
+    anims['play']=[
         '''
 _._     _,-'""`-._
 (,-.`._,'(       |\`-/|
@@ -97,7 +125,7 @@ _._     _,-'""`-._
           `-    \`_`"'-'
     '''
     ]
-    anims['sleeping']=[
+    anims['sleep']=[
         '''
  \t\t
  \t\t       
@@ -163,15 +191,12 @@ _._     _,-'""`-._
     ]
     def __init__(self, name):
         self.name = name
-#Thread managing
-def uiCycle():
-    while True:
-        build_actionWindow()
-        global stop_threads
-        if stop_threads:
-            break
 
+#------------------PROGRAM----------------------------
+
+#resize window size
 system('mode con: cols=40 lines=18')
+
 
 c1 = cat("Sigi")
 current_animation = c1.anims['feed']
@@ -182,19 +207,26 @@ t1 = threading.Thread(target=uiCycle)
 t1.start()
 
 
-
-with keyboard.Listener(on_press=on_press) as listener:
-        listener.join()
+#Statemaschine
 while True:
-    if current_animation == "play":
+    with keyboard.Listener(on_press=on_press) as listener:
+        listener.join()
+        log("stopped listener")
+    
+    if entered_id == -1:
+        log("Entering idle state")
+        #idle
+        ...
+    elif entered_id == 0:
+        log("Entering play state")
         current_animation = c1.anims['play']
-    elif current_animation == "feed":
-        current_animation = c1.anims['feed']
-        if c1.hunger > 0:
-            hunger-=5
-        if c1.hunger < 0:
-            hunger = 0
-        time.sleep(2)
-        current_animation = "idle"
-    elif current_animation == "idle":
+
+        ...
+    elif entered_id == 1:
+        ...
+    elif entered_id == 2:
+        ...
+    elif entered_id == 3:
+        ...
+    elif entered_id == 4:
         ...
